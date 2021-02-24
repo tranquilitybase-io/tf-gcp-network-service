@@ -107,7 +107,7 @@ variable "firewall_custom_rules" {
       ranges               = ["35.235.240.0/20"]
       use_service_accounts = false
       sources              = null
-      targets              = null
+      targets              = ["allow-iap-ssh"]
       rules = [
         {
           protocol = "tcp"
