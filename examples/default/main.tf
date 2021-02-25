@@ -15,8 +15,8 @@
 module "vpc" {
   #source = "github.com/tranquilitybase-io/tf-gcp-network-service.git?ref=v0.1.0"
   source       = "../.."
+  network_name = var.network_name
   project_id   = var.project_id
   region       = var.region
-  network_name = var.network_name
   subnets      = var.subnets
 }

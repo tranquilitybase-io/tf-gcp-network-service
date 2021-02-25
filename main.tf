@@ -19,14 +19,14 @@
 module "vpc" {
   source                                 = "terraform-google-modules/network/google//modules/vpc"
   version                                = "~> 3.0.0"
-  project_id                             = var.project_id
-  network_name                           = var.network_name
-  routing_mode                           = var.routing_mode
-  description                            = var.description
-  shared_vpc_host                        = var.shared_vpc_host
   auto_create_subnetworks                = var.auto_create_subnetworks
   delete_default_internet_gateway_routes = var.delete_default_internet_gateway_routes
+  description                            = var.description
   mtu                                    = var.mtu
+  network_name                           = var.network_name
+  project_id                             = var.project_id
+  routing_mode                           = var.routing_mode
+  shared_vpc_host                        = var.shared_vpc_host
 }
 
 ###
@@ -36,10 +36,10 @@ module "vpc" {
 module "subnets" {
   source           = "terraform-google-modules/network/google//modules/subnets"
   version          = "~> 3.0.0"
-  project_id       = var.project_id
   network_name     = module.vpc.network_name
-  subnets          = var.subnets
+  project_id       = var.project_id
   secondary_ranges = var.secondary_ranges
+  subnets          = var.subnets
 }
 
 ###
@@ -49,10 +49,10 @@ module "subnets" {
 module "routes" {
   source            = "terraform-google-modules/network/google//modules/routes"
   version           = "~> 3.0.0"
-  project_id        = var.project_id
-  network_name      = module.vpc.network_name
-  routes            = var.routes
   module_depends_on = [module.subnets.subnets]
+  network_name      = module.vpc.network_name
+  project_id        = var.project_id
+  routes            = var.routes
 }
 
 ###
@@ -62,15 +62,15 @@ module "routes" {
 module "firewall" {
   source              = "terraform-google-modules/network/google//modules/fabric-net-firewall"
   version             = "~> 3.0.0"
-  project_id          = var.project_id
-  network             = module.vpc.network_name
+  custom_rules        = var.firewall_custom_rules
   http_source_ranges  = var.https_source_ranges
   http_target_tags    = var.https_target_tags
   https_source_ranges = var.https_source_ranges
   https_target_tags   = var.http_target_tags
+  network             = module.vpc.network_name
+  project_id          = var.project_id
   ssh_source_ranges   = var.ssh_source_ranges
   ssh_target_tags     = var.ssh_target_tags
-  custom_rules        = var.firewall_custom_rules
 }
 
 ###
@@ -80,15 +80,15 @@ module "firewall" {
 module "cloud-nat" {
   source                             = "terraform-google-modules/cloud-nat/google"
   version                            = "~> 1.3.0"
-  project_id                         = var.project_id
-  region                             = var.region
-  network                            = module.vpc.network_self_link
   create_router                      = var.create_router
-  router                             = var.router_name
+  log_config_enable                  = var.log_config_enable
+  log_config_filter                  = var.log_config_filter
   name                               = var.router_nat_name
   nat_ip_allocate_option             = var.nat_ip_allocate_option
   nat_ips                            = var.nat_ips
+  network                            = module.vpc.network_self_link
+  project_id                         = var.project_id
+  region                             = var.region
+  router                             = var.router_name
   source_subnetwork_ip_ranges_to_nat = var.source_subnetwork_ip_ranges_to_nat
-  log_config_enable                  = var.log_config_enable
-  log_config_filter                  = var.log_config_filter
 }

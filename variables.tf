@@ -100,7 +100,7 @@ variable "firewall_custom_rules" {
     extra_attributes = map(string)
   }))
   default = {
-    allow-iap-ingress = {
+    allow-iap-ssh = {
       description          = "Allow inbound connections from Identity-Aware Proxy"
       direction            = "INGRESS"
       action               = "allow"
@@ -111,7 +111,7 @@ variable "firewall_custom_rules" {
       rules = [
         {
           protocol = "tcp"
-          ports    = []
+          ports    = ["22"]
         }
       ]
       extra_attributes = {}

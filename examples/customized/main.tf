@@ -15,10 +15,10 @@
 module "vpc" {
   #source = "github.com/tranquilitybase-io/tf-gcp-network-service.git?ref=v0.1.0"
   source                = "../.."
+  firewall_custom_rules = var.firewall_custom_rules
+  network_name          = var.network_name
   project_id            = var.project_id
   region                = var.region
-  network_name          = var.network_name
-  subnets               = var.subnets
   secondary_ranges      = var.secondary_ranges
-  firewall_custom_rules = var.firewall_custom_rules
+  subnets               = var.subnets
 }
