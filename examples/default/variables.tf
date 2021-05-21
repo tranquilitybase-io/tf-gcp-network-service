@@ -12,10 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "region" {
-  description = "GCP region name"
+variable "network_name" {
+  description = "The name of the network being created"
   type        = string
-  default     = "europe-west2"
+  default     = "vpc-network"
 }
 
 variable "project_id" {
@@ -23,10 +23,10 @@ variable "project_id" {
   type        = string
 }
 
-variable "network_name" {
-  description = "The name of the network being created"
+variable "region" {
+  description = "GCP region name"
   type        = string
-  default     = "vpc-network"
+  default     = "europe-west2"
 }
 
 variable "subnets" {

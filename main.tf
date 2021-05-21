@@ -92,3 +92,20 @@ module "cloud-nat" {
   router                             = var.router_name
   source_subnetwork_ip_ranges_to_nat = var.source_subnetwork_ip_ranges_to_nat
 }
+
+###
+# Create dns zone and records
+###
+
+module "dns-private-zone" {
+  source  = "terraform-google-modules/cloud-dns/google"
+  version = "3.0.0"
+  count   = var.create_dns_zone ? 1 : 0
+
+  project_id                         = var.project_id
+  type                               = var.zone_type
+  name                               = var.zone_name
+  domain                             = var.zone_domain
+  private_visibility_config_networks = [module.vpc.network_self_link]
+  recordsets                         = var.dns_records
+}

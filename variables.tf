@@ -200,3 +200,44 @@ variable "log_config_filter" {
   type        = string
   default     = "ALL"
 }
+
+variable "create_dns_zone" {
+  description = ""
+  type = bool
+  default = true
+}
+
+variable "dns_records" {
+  description = "dns records to assign to zone"
+  type = list(object({
+    name = string
+    type = string
+    ttl  = number
+    records = list(string)
+  }))
+  default = []
+}
+
+variable "network_visibility_domains" {
+  description = ""
+  type = list(string)
+  default = []
+}
+
+variable "zone_domain" {
+  description = ""
+  type = string
+  default = "example.com."
+}
+
+variable "zone_name" {
+  description = ""
+  type = string
+  default = "example-com"
+}
+
+variable "zone_type" {
+  description = ""
+  type = string
+  default = "private"
+}
